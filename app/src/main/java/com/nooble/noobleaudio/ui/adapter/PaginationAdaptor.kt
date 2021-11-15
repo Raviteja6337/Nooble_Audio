@@ -29,7 +29,7 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
     private val TAG = PaginationAdapter::class.java.simpleName
 
     private val context: Context
-    private var movieList: LinkedList<ShortDetails>?
+    private var shortsList: LinkedList<ShortDetails>?
     private var isLoadingAdded = false
     private var mediaPlayer:MediaPlayer //Media Player
 
@@ -40,14 +40,14 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
 
     init {
         this.context = context
-        movieList = list
+        shortsList = list
 
 //        val audioAttributes = AudioAttributes.Builder()
 //            .setUsage(AudioAttributes.USAGE_MEDIA)
 //            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
 //            .build()
         mediaPlayer = MediaPlayer()
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
 
         builder = AlertDialog.Builder(context)
 
@@ -68,7 +68,7 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
         when (viewType) {
             ITEM -> {
                 val viewItem: View = inflater.inflate(R.layout.shorts_list_item, parent, false)
-                viewHolder = MovieViewHolder(viewItem)
+                viewHolder = ShortsViewHolder(viewItem)
             }
             LOADING -> {
                 val viewLoading: View = inflater.inflate(R.layout.network_state_item, parent, false)
@@ -79,24 +79,24 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val short: ShortDetails = movieList!![position]
+        val short: ShortDetails = shortsList!![position]
         when (getItemViewType(position)) {
             ITEM -> {
-                val movieViewHolder = holder as MovieViewHolder
-                movieViewHolder.movieTitle.setText(short.title)
-                movieViewHolder.dateCreated.setText(short.dateCreated)
+                val shortViewHolder = holder as ShortsViewHolder
+                shortViewHolder.shortsTitle.setText(short.title)
+                shortViewHolder.dateCreated.setText(short.dateCreated)
 
                 //SeekBar to show Song Progress
-                movieViewHolder.seekBarAudio.setOnSeekBarChangeListener(this)
-                songProgressBar = movieViewHolder.seekBarAudio
+                shortViewHolder.seekBarAudio.setOnSeekBarChangeListener(this)
+                songProgressBar = shortViewHolder.seekBarAudio
                 songProgressBar?.setProgress(0)
 
-                movieViewHolder.audioBtn.setOnClickListener(View.OnClickListener {
+                shortViewHolder.audioBtn.setOnClickListener(View.OnClickListener {
 
                         if (it.tag.equals("play")) {
 
-                            movieViewHolder.audioBtn.tag = "pause"
-                            movieViewHolder.audioBtn.setImageResource(R.drawable.pause_btn)
+                            shortViewHolder.audioBtn.tag = "pause"
+                            shortViewHolder.audioBtn.setImageResource(R.drawable.pause_btn)
 
 
                             try {
@@ -123,8 +123,8 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
 
                             mediaPlayer.setOnCompletionListener(OnCompletionListener {
                                 Toast.makeText(context, "End", Toast.LENGTH_SHORT).show()
-                                movieViewHolder.audioBtn.tag = "play"
-                                movieViewHolder.audioBtn.setImageResource(R.drawable.play_btn)
+                                shortViewHolder.audioBtn.tag = "play"
+                                shortViewHolder.audioBtn.setImageResource(R.drawable.play_btn)
                                 mediaPlayer.reset()
                                 mediaPlayer.release()
 
@@ -143,8 +143,8 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
 //                            mediaPlayer.
 //                        }
                         else {
-                            movieViewHolder.audioBtn.tag = "play"
-                            movieViewHolder.audioBtn.setImageResource(R.drawable.play_btn)
+                            shortViewHolder.audioBtn.tag = "play"
+                            shortViewHolder.audioBtn.setImageResource(R.drawable.play_btn)
                             mediaPlayer.pause()
 //                            mediaPlayer.stop()
 //                            mediaPlayer.reset()
@@ -155,12 +155,9 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
 
                 //Play the next Audio Clip automatically after the scroll is complete
                 if (MainActivity.playNextAudioAutomatically) {
-                    movieViewHolder.audioBtn.callOnClick()
+                    shortViewHolder.audioBtn.callOnClick()
                     MainActivity.playNextAudioAutomatically = false
                 }
-
-//                Glide.with(context).load(movie.getImageUrl())
-//                    .apply(RequestOptions.centerCropTransform()).into(movieViewHolder.movieImage)
             }
             LOADING -> {
                 val loadingViewHolder = holder as LoadingViewHolder
@@ -201,11 +198,11 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
 
 
     override fun getItemCount(): Int {
-        return if (movieList == null) 0 else movieList!!.size
+        return if (shortsList == null) 0 else shortsList!!.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position == movieList!!.size - 1 && isLoadingAdded) LOADING else ITEM
+        return if (position == shortsList!!.size - 1 && isLoadingAdded) LOADING else ITEM
     }
 
 
@@ -216,43 +213,43 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
 
     fun removeLoadingFooter() {
         isLoadingAdded = false
-        val position: Int = movieList!!.size - 1
+        val position: Int = shortsList!!.size - 1
         val result: ShortDetails = getItem(position)
         if (result != null) {
-            movieList?.removeAt(position)
+            shortsList?.removeAt(position)
             notifyItemRemoved(position)
         }
     }
 
-    fun add(movie: ShortDetails?) {
-        if (movie != null) {
-            movieList?.add(movie)
+    fun add(short: ShortDetails?) {
+        if (short != null) {
+            shortsList?.add(short)
         }
-        notifyItemInserted(movieList!!.size - 1)
+        notifyItemInserted(shortsList!!.size - 1)
     }
 
-    fun addAll(moveResults: List<ShortDetails?>) {
-        for (result in moveResults) {
+    fun addAll(shortResults: List<ShortDetails?>) {
+        for (result in shortResults) {
             add(result)
         }
     }
 
-    fun setMovieList(shortList: List<ShortDetails>?) {
-        this.movieList = movieList
+    fun setShortList(shortList: List<ShortDetails>?) {
+        this.shortsList = shortsList
     }
 
     fun getItem(position: Int): ShortDetails {
-        return movieList!![position]
+        return shortsList!![position]
     }
 
-    inner class MovieViewHolder(itemView: View) : ViewHolder(itemView) {
-        val movieTitle: TextView
+    inner class ShortsViewHolder(itemView: View) : ViewHolder(itemView) {
+        val shortsTitle: TextView
         val dateCreated:TextView
         val audioBtn:ImageButton
         val seekBarAudio:SeekBar
 
         init {
-            movieTitle   = itemView.findViewById(R.id.cv_title) as TextView
+            shortsTitle   = itemView.findViewById(R.id.cv_title) as TextView
             dateCreated  = itemView.findViewById(R.id.tv_created_on) as TextView
             audioBtn     = itemView.findViewById(R.id.audio_btn) as ImageButton
             seekBarAudio = itemView.findViewById(R.id.songProgressBar) as SeekBar
@@ -334,7 +331,7 @@ class PaginationAdapter(context: Context, list:LinkedList<ShortDetails>) : Recyc
 
     //When user starts moving the progress handler
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
-        mHandler.removeCallbacks(mUpdateTimeTask);
+        mHandler.removeCallbacks(mUpdateTimeTask)
     }
 
     //When user stops moving the progress hanlder

@@ -5,12 +5,14 @@ import android.os.Handler
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.nooble.noobleaudio.R
 import com.nooble.noobleaudio.data.model.ShortDetails
 import com.nooble.noobleaudio.data.model.ShortResult
+import com.nooble.noobleaudio.data.model.ShortsViewModel
 import com.nooble.noobleaudio.data.network.ApiController
 import com.nooble.noobleaudio.data.network.ApiInterface
 import com.nooble.noobleaudio.ui.adapter.PaginationAdapter
@@ -23,6 +25,8 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
 
     private val TAG = MainActivity::class.java.simpleName
+
+    private lateinit var shortsViewModel: ShortsViewModel
 
     private lateinit var mActivity: AppCompatActivity
     private var verifyApiCallRequest: Call<ResponseBody>? = null
@@ -47,6 +51,13 @@ class MainActivity : AppCompatActivity() {
         //Hiding the ActionBar
         actionBar?.hide()
 
+
+        shortsViewModel = ViewModelProvider(this).get(ShortsViewModel::class.java)
+
+        shortsViewModel.shortsDetailsData.observe(this, {
+            Log.d(TAG,"Insert the Data into Room DB : shorts_db")
+        })
+
         //getting the shorts data from the URL
         getShortDetails()
 
@@ -67,7 +78,7 @@ class MainActivity : AppCompatActivity() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val visibleItemCount = layoutManager.childCount
                 val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-                val total = adaptorShorts!!.itemCount
+                val total = adaptorShorts.itemCount
 
                 if (!isLoading) {
 
@@ -83,48 +94,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         })
-
-
-
-
-//        val apiService: GetMovieDetails = MovieDbClient.getClient()
-//
-//        movieRepository = MoviePagedListRepository(apiService)
-//
-//        viewModel = getViewModel()
-//
-//        val movieAdapter = PopularMoviePagedListAdapter(this)
-
-//        val gridLayoutManager = GridLayoutManager(this, 3)
-//
-//        gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int): Int {
-//                val viewType = movieAdapter.getItemViewType(position)
-//                if (viewType == movieAdapter.MOVIE_VIEW_TYPE) return 1
-//                else return 3
-//            }
-//        };
-
-
-
-//        rv_movie_list.layoutManager = gridLayoutManager
-//        rv_movie_list.setHasFixedSize(true)
-//        rv_movie_list.adapter = movieAdapter
-
-//        viewModel.moviePagedList.observe(this, Observer {
-//            movieAdapter.submitList(it)
-//        })
-//
-//        viewModel.networkState.observe(this, Observer {
-//            progress_bar_popular.visibility =
-//                if (viewModel.listIsEmpty() && it == NetworkState.LOADING) View.VISIBLE else View.GONE
-//            txt_error_popular.visibility =
-//                if (viewModel.listIsEmpty() && it == NetworkState.ERROR) View.VISIBLE else View.GONE
-//
-//            if (!viewModel.listIsEmpty()) {
-//                movieAdapter.setNetworkState(it)
-//            }
-//        })
 
     }
 
@@ -163,7 +132,7 @@ class MainActivity : AppCompatActivity() {
               val shortsRes = Gson().fromJson(response.body()?.string(), ShortResult::class.java)
 //              shortDetails.clear()
               shortDetails.addAll(shortsRes.shorts)
-              adaptorShorts?.notifyDataSetChanged()
+              adaptorShorts.notifyDataSetChanged()
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
