@@ -7,4 +7,13 @@
     <color name="top_bar_clr">#dedede</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
+    <color name="green">#FF4CAF50</color>
+    <color name="yellow">#FFB701</color>
+    <color name="red">#f55c47</color>
+    <color name="blue">#38ACDD</color>
+    <color name="card_bg">#D3D1D1</color>
+    <color name="relative_bg">#2b2e4a</color>
+    <color name="countycode_bg">#EAE9E9</color>
+    <color name="card_stroke">#0C0F45</color>
+    <color name="black_theme_txt">#E7DCDC</color>
 </resources>

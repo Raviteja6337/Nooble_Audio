@@ -49,6 +49,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textSize="18sp"
+                android:textColor="@color/yellow"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textStyle="bold"
                 android:text="Nooble"

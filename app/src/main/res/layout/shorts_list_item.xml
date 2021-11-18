@@ -18,6 +18,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/relative_bg"
         android:orientation="vertical">
 
         <LinearLayout
@@ -34,7 +35,7 @@
                 android:layout_gravity="center"
                 android:padding="5dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/profile_image">
+                android:src="@drawable/black_theme_profile_btn">
 
             </ImageView>
 
@@ -57,6 +58,7 @@
                 android:layout_marginTop="2dp"
                 android:ellipsize="end"
                 android:maxLines="1"
+                android:textColor="@color/white"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textStyle="bold"
                 tools:text="movie" />
@@ -70,6 +72,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textSize="10sp"
+                    android:textColor="@color/white"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                     android:text="California, United States" />
 
@@ -81,7 +84,7 @@
                 android:layout_gravity="end"
                 android:padding="8dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/more_btn">
+                android:src="@drawable/black_theme_morebtn">
 
             </ImageView>
 
@@ -114,8 +117,8 @@
                 android:layout_weight="1"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                android:thumbTint="@color/colorPrimaryDark"
-                android:secondaryProgressTint="@color/colorPrimaryDark"
+                android:thumbTint="@color/yellow"
+                android:secondaryProgressTint="@color/yellow"
                 android:progressTint="@color/light_gray"
                 android:progress="10"
                 android:progressDrawable="@drawable/seekbar_progress_bg"
@@ -124,6 +127,39 @@
 
         </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="5dp"
+                    android:padding="8dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:background="@color/relative_bg"
+                    android:src="@drawable/like_btn">
+                </ImageButton>
+
+                <ImageButton
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_margin="4dp"
+                    android:padding="8dp"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter"
+                    android:background="@color/relative_bg"
+                    android:src="@drawable/share_btn">
+                </ImageButton>
+
+            </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -139,6 +175,7 @@
                 android:textStyle="bold"
                 android:textSize="12sp"
                 android:text="Created On:"
+                android:textColor="@color/black_theme_txt"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 tools:text="Created On:" />
 
@@ -150,9 +187,11 @@
                 android:layout_marginStart="4dp"
                 android:layout_marginBottom="10dp"
                 android:textSize="12sp"
+                android:textColor="@color/black_theme_txt"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 tools:text="date" />
 
+        </LinearLayout>
         </LinearLayout>
 
 
